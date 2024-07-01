@@ -1,0 +1,13 @@
+<mat-form-field class="search-bar">
+  <mat-label>Search for free video</mat-label>
+  <input matInput type="text" [(ngModel)]="value">
+  <div matTextPrefix class="videos">
+    <mat-icon aria-hidden="false" aria-label="icon video">smart_display</mat-icon>
+    <p>Videos</p>
+    <mat-divider class="custom-divider" [vertical]="true"></mat-divider>
+  </div>
+  <button matSuffix mat-icon-button (click)="value=''">
+    <mat-icon aria-hidden="false" aria-label="Search button">search</mat-icon>
+  </button>
+</mat-form-field>
+

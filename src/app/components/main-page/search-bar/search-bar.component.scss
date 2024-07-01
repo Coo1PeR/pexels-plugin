@@ -1,0 +1,15 @@
+.search-bar {
+  min-width: 540px;
+}
+
+.videos {
+  display: flex;
+  align-items: center;
+  padding-right: 25px;
+}
+
+.custom-divider {
+  height: 32px;
+  border-left: 1px solid rgba(68, 71, 78, 0.9);
+  margin: 0 8px;
+}
