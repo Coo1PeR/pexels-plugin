@@ -1,0 +1,11 @@
+<mat-dialog-content>
+  <p>Please, enter your personal Pexels API key</p>
+  <mat-form-field>
+    <mat-label>API key</mat-label>
+    <input matInput [(ngModel)]="apiKey" />
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+<!--  <button mat-button (click)="onNoClick()">No Thanks</button>-->
+  <button mat-button (click)="setApiKey()" cdkFocusInitial>Ok</button>
+</mat-dialog-actions>
