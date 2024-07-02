@@ -13,6 +13,7 @@ import {MatButton} from "@angular/material/button";
 import {Store} from "@ngxs/store";
 import {ApiKeyActions} from "../../../core/stores/state/api-key.actions";
 import {Dialog} from "@angular/cdk/dialog";
+import {ApiKeyService} from "../../../core/services/api-key.service";
 
 @Component({
   selector: 'app-api-key-dialog',
@@ -26,7 +27,7 @@ import {Dialog} from "@angular/cdk/dialog";
     MatButton,
     MatDialogActions,
     MatDialogClose,
-    MatLabel
+    MatLabel,
   ],
   templateUrl: './api-key-dialog.component.html',
   styleUrl: './api-key-dialog.component.scss'
@@ -36,6 +37,7 @@ export class ApiKeyDialogComponent {
   apiKey!: string;
   private store = inject(Store)
   private dialog = inject(Dialog);
+  apiKeyService = inject(ApiKeyService)
 
   // onNoClick(): void {
   //   this.dialogRef.close();
@@ -44,5 +46,6 @@ export class ApiKeyDialogComponent {
   setApiKey() {
     this.store.dispatch(new ApiKeyActions.Set(this.apiKey));
     this.dialog.closeAll();
+    this.apiKeyService.saveApiKey()
   }
 }

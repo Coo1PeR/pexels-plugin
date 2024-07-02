@@ -4,31 +4,16 @@ import { of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {Store} from "@ngxs/store";
 import {ApiKeyState} from "../stores/state/api-key.state";
+import {ApiKeyActions} from "../stores/state/api-key.actions";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiKeyService {
-  private apiKey: string = '';
-  private apiKeyFilePath: string = '/pexels-api-key.txt';
+  private apiKeyFilePath: string = 'assets/pexels-api-key.txt';
 
-  constructor(private http: HttpClient) { }
-
-private store = inject(Store)
-
-  getApiKey() {
-    if (this.apiKey) {
-      return of(this.apiKey);
-    } else {
-      return this.http.get(this.apiKeyFilePath, { responseType: 'text' }).pipe(
-        map((key: string) => {
-          this.apiKey = key;
-          return this.apiKey;
-        }),
-        catchError(() => of(null))
-      );
-    }
-  }
+  private store = inject(Store)
+  private http = inject(HttpClient)
 
   saveToFileSystem(content: string) {
     const blob = new Blob([content], { type: 'text/plain' });
@@ -43,5 +28,19 @@ private store = inject(Store)
   saveApiKey() {
     const apiKey = this.store.selectSnapshot(ApiKeyState.getApiKey)
     this.saveToFileSystem(apiKey);
+  }
+
+  checkAndLoadApiKey() {
+    return this.http.get(this.apiKeyFilePath, { responseType: 'text' })
+      .pipe(
+        map(apiKey => {
+          this.store.dispatch(new ApiKeyActions.Set(apiKey));
+          return true;  // File exists and API key is loaded
+        }),
+        catchError(error => {
+          console.error('API key file not found or cannot be read', error);
+          return of(false);  // File does not exist or cannot be read
+        })
+      );
   }
 }
