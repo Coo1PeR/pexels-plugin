@@ -6,12 +6,14 @@ import {SearchVideos, VideoAction} from "./video.actions";
 
 export interface VideoStateModel {
   videos: Video[];
+  loading: boolean
 }
 
 @State<VideoStateModel>({
   name: 'videos',
   defaults: {
-    videos: []
+    videos: [],
+    loading: false
   }
 })
 @Injectable()
@@ -25,11 +27,17 @@ export class VideoState {
     return state.videos;
   }
 
+  @Selector()
+  static isLoading(state: VideoStateModel) {
+    return state.loading;
+  }
+
   @Action(SearchVideos)
   searchVideos(ctx: StateContext<VideoStateModel>, action: SearchVideos) {
+    ctx.patchState({ loading: true });
     return this.pexelsService.searchVideos(action.query).subscribe((result: any) => {
       const videos = result.videos.map((videoData: any) => new Video(videoData));
-      ctx.patchState({ videos });
+      ctx.patchState({ videos, loading: false });
     });
   }
 }
