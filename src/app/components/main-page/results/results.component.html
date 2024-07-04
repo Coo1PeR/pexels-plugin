@@ -1,9 +1,8 @@
 <div class="results">
-  <p>results works!</p>
-  <p>results works!</p>
-  <p>results works!</p>
-  <p>results works!</p>
-  <p>results works!</p>
-  <p>results works!</p>
-  <p>results works!</p>
+  <div *ngFor="let video of videos$ | async">
+    <h3>{{ video.user.name }}</h3>
+    <img [src]="video.image" [alt]="video.id" width="300">
+    <p>Duration: {{ video.duration }} seconds</p>
+    <p><a [href]="video.url" target="_blank">Watch on Pexels</a></p>
+  </div>
 </div>
