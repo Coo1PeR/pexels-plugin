@@ -1,7 +1,7 @@
 <div class="results">
-  <div *ngFor="let video of videos$ | async">
+  <div *ngFor="let video of videos$ | async" class="video">
     <h3>{{ video.user.name }}</h3>
-    <img [src]="video.image" [alt]="video.id" width="300">
+    <img [src]="video.image" [alt]="video.id" width="300" height="200">
     <p>Duration: {{ video.duration }} seconds</p>
     <p><a [href]="video.url" target="_blank">Watch on Pexels</a></p>
   </div>
