@@ -8,6 +8,7 @@ import {ApiKeyState} from "./core/stores/state/api-key.state";
 import {provideHttpClient} from "@angular/common/http";
 import {NgxsReduxDevtoolsPluginModule} from "@ngxs/devtools-plugin";
 import {NgxsLoggerPluginModule} from "@ngxs/logger-plugin";
+import {VideoState} from "./core/stores/state/video.state";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimationsAsync(),
     importProvidersFrom([
-      NgxsModule.forRoot([ApiKeyState]),
+      NgxsModule.forRoot([ApiKeyState, VideoState]),
       NgxsLoggerPluginModule.forRoot(),
       NgxsReduxDevtoolsPluginModule.forRoot()
     ]),
