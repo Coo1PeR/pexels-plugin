@@ -5,7 +5,7 @@ export const routes: Routes = [
   {
     path: '',
     component: MainPageComponent,
-    title: 'Main Page',
+    title: 'Pexels Plugin',
   },
   {
     path: '**',
