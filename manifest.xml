@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BlackmagicDesign>
+    <Plugin>
+        <Id>com.blackmagicdesign.resolve.pexelsplugin</Id>
+        <Name>Pexels Video Search Plugin</Name>
+        <Version>1.0</Version>
+        <Description>Pexels Video Search Plugin</Description>
+        <FilePath>main.js</FilePath>
+    </Plugin>
+</BlackmagicDesign>
