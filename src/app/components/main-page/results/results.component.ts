@@ -42,7 +42,18 @@ export class ResultsComponent {
       (response) => {
         if (response) {
           // @ts-ignore
-          this.videoLink = response.video_files[0].link
+          this.videoLink = response.video_files[0].link;
+          console.log(this.videoLink);
+
+          // Define the file path where the video will be saved
+          const filePath = `/Library/Application Support/Blackmagic Design/DaVinci Resolve/Workflow Integration Plugins/downloads/${videoId}.mp4`;
+
+          // Call the electron function to download the video
+          window.electron.downloadVideo(this.videoLink, filePath).then((filePath) => {
+            console.log(`Video downloaded to: ${filePath}`);
+          }).catch((error) => {
+            console.error('Error downloading video:', error);
+          });
         } else {
           console.error('Error downloading video');
         }

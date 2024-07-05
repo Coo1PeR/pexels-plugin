@@ -1,5 +1,7 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const fs = require('fs');
+const https = require('https');
 
 function createWindow() {
     const mainWindow = new BrowserWindow({
@@ -8,7 +10,8 @@ function createWindow() {
         useContentSize: true,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
-            nodeIntegration: true
+            nodeIntegration: true,
+            contextIsolation: true
         }
     });
 
@@ -18,6 +21,20 @@ function createWindow() {
 
     mainWindow.loadFile('dist/pexels-plugin/browser/index.html');
 }
+
+ipcMain.handle('download-video', async (event, url, filePath) => {
+  return new Promise((resolve, reject) => {
+    const file = fs.createWriteStream(filePath);
+    https.get(url, (response) => {
+      response.pipe(file);
+      file.on('finish', () => {
+        file.close(() => resolve(filePath));
+      });
+    }).on('error', (err) => {
+      fs.unlink(filePath, () => reject(err.message));
+    });
+  });
+});
 
 app.on('ready', createWindow);
 app.on('window-all-closed', function () {
