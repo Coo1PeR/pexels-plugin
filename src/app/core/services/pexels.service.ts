@@ -9,21 +9,25 @@ import {ApiKeyState} from "../stores/state/api-key.state";
 export class PexelsService {
   private store = inject(Store)
 
-  private API_KEY = 'bYV1GvoDKy6xSxPUOqsDic8YRjC7jjQMuoRIwo98xQu7bNWVICv3qXRE'  //this.store.selectSnapshot(ApiKeyState.getApiKey);
+  private getApiKey(): string {
+    return this.store.selectSnapshot(ApiKeyState.getApiKey);
+  }
+
   private BASE_URL = 'https://api.pexels.com/videos';
 
   constructor(private http: HttpClient) {}
 
   searchVideos(query: string, page: number = 1) {
+    const apiKey = this.getApiKey();
     return this.http.get(`${this.BASE_URL}/search`, {
-      headers: { Authorization: this.API_KEY },
+      headers: { Authorization: apiKey },
       params: { query, per_page: '6', page: page.toString() }
     });
   }
 
-  getVideoById(videoId: string) {
-    return this.http.get(`${this.BASE_URL}/videos/${videoId}`, {
-      headers: { Authorization: this.API_KEY }
-    });
-  }
+  // getVideoById(videoId: string) {
+  //   return this.http.get(`${this.BASE_URL}/videos/${videoId}`, {
+  //     headers: { Authorization: this.apiKey }
+  //   });
+  // }
 }
