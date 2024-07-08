@@ -25,6 +25,7 @@
     "@ngxs/devtools-plugin": "^18.0.0-dev.master-c177048",
     "@ngxs/logger-plugin": "^18.0.0-dev.master-c177048",
     "@ngxs/store": "^18.0.0",
+    "core-js": "^3.37.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
