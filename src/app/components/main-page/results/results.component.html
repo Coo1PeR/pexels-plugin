@@ -1,9 +1,13 @@
 <div class="results">
   <div *ngFor="let video of videos$ | async" class="video">
-    <h3>{{ video.user.name }}</h3>
-    <img [src]="video.image" [alt]="video.id" width="300" height="200" (click)="downloadVideo(video.id)">
-    <p>Duration: {{ video.duration }} seconds</p>
-    <p><a [href]="video.url" target="_blank">Watch on Pexels</a></p>
+    <div class="video-container">
+      <img [src]="video.image" [alt]="video.id" width="300" height="200" (click)="downloadVideo(video.id)">
+      <a matSuffix mat-icon-button class="icon-button" [href]="video.url" target="_blank">
+        <mat-icon aria-hidden="false" aria-label="preview button">smart_display</mat-icon>
+      </a>
+    </div>
+      <h4 class="author">Author: {{ video.user.name }}</h4>
+      <p class="duration">Duration: {{ video.duration }} seconds</p>
   </div>
 </div>
 

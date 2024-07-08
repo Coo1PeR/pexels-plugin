@@ -1,10 +1,39 @@
 .results {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly
+  justify-content: space-evenly;
 }
 
 .video {
-  margin: 20px;
+  margin: 16px;
 }
 
+.video-container {
+  position: relative;
+  width: 270px;
+  height: auto;
+  background: linear-gradient(to right, #e4e4e4, #f4f4f4);
+}
+
+.video-container img {
+  display: block;
+  width: 100%;
+  max-height: 170px;
+}
+
+.author {
+  margin: 5px 0
+}
+
+.duration {
+  margin: 5px 0
+}
+
+.icon-button {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border-radius: 50%;
+}

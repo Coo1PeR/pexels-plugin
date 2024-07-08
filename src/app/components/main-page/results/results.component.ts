@@ -6,6 +6,9 @@ import {Observable} from "rxjs";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {PexelsService} from "../../../core/services/pexels.service";
+import {MatIcon} from "@angular/material/icon";
+import {MatIconAnchor, MatIconButton} from "@angular/material/button";
+import {MatSuffix} from "@angular/material/form-field";
 
 @Component({
   selector: 'app-results',
@@ -14,7 +17,11 @@ import {PexelsService} from "../../../core/services/pexels.service";
     NgForOf,
     AsyncPipe,
     MatProgressBar,
-    NgIf
+    NgIf,
+    MatIcon,
+    MatIconButton,
+    MatSuffix,
+    MatIconAnchor
   ],
   templateUrl: './results.component.html',
   styleUrl: './results.component.scss'
