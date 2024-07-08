@@ -17,7 +17,7 @@ export class PexelsService {
   searchVideos(query: string, page: number = 1) {
     return this.http.get(`${this.BASE_URL}/search`, {
       headers: { Authorization: this.API_KEY },
-      params: { query, per_page: '9', page: page.toString() }
+      params: { query, per_page: '6', page: page.toString() }
     });
   }
 

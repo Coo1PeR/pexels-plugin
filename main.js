@@ -8,8 +8,8 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 825,
+    width: 1600,
+    height: 1200,
     useContentSize: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
