@@ -4,8 +4,8 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electron', {
-    // consoleDownloadVideo: (url, filePath) => ipcRenderer.invoke('download-video', url, filePath)
-    downloadVideo: (data) => ipcRenderer.send('download-video', data)
+  downloadVideo: (videoId, apiKey) => ipcRenderer.send('download-video', { videoId, apiKey }),
+  onVideoDownloaded: (callback) => ipcRenderer.on('video-downloaded', callback)
 });
 
 window.addEventListener('DOMContentLoaded', () => {

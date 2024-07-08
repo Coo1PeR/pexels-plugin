@@ -1,4 +1,4 @@
-const {app, BrowserWindow, ipcMain} = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const https = require('https');
@@ -24,41 +24,23 @@ function createWindow() {
 
   mainWindow.loadURL('http://localhost:4200'); // or your Angular app's URL
 
-
   mainWindow.loadFile('dist/pexels-plugin/browser/index.html');
 
-  // // Optionally open DevTools for debugging
-  // mainWindow.webContents.openDevTools();
-  //
-  // // Handle any potential errors
-  // mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
-  //   console.error(`Failed to load URL: ${validatedURL} with error ${errorDescription} (${errorCode})`);
-  // });
-}
+  mainWindow.webContents.openDevTools();
 
-ipcMain.handle('download-video', async (event, url, filePath) => {
-  return new Promise((resolve, reject) => {
-    console.log(`Event: ${event}, URL: ${url}, Downloading ${filePath}`);
-    const file = fs.createWriteStream(filePath);
-    https.get(url, (response) => {
-      response.pipe(file);
-      file.on('finish', () => {
-        file.close(() => resolve(filePath));
-      });
-    }).on('error', (err) => {
-      fs.unlink(filePath, () => reject(err.message));
-    });
+  mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
+    console.error(`Failed to load URL: ${validatedURL} with error ${errorDescription} (${errorCode})`);
   });
-});
+}
 
 app.on('ready', createWindow);
 
 ipcMain.on('download-video', (event, data) => {
-  const {videoId, apiKey} = data;
-  const videoUrl = `https://api.pexels.com/videos/videos/${videoId}`; // Adjust if needed
-  const videoPath = path.join('/Library/Application Support/Blackmagic Design/DaVinci Resolve/Workflow Integration Plugins', `${videoId}.mp4`);
+  const { videoId, apiKey } = data;
+  console.log(`Received request to download video: ${videoId} with API key: ${apiKey}`);
 
-  // const videoPath = path.join(app.getPath('userData'), `${videoId}.mp4`);
+  const videoUrl = `https://api.pexels.com/videos/videos/${videoId}`;
+  const videoPath = path.join('/Library/Application Support/Blackmagic Design/DaVinci Resolve/Workflow Integration Plugins', `${videoId}.mp4`);
 
   const options = {
     headers: {
@@ -67,22 +49,45 @@ ipcMain.on('download-video', (event, data) => {
   };
 
   https.get(videoUrl, options, (response) => {
-    response.pipe(fs.createWriteStream(videoPath))
-      .on('finish', () => {
-        console.log('Video downloaded successfully');
-        // Send a message back to the renderer process if needed
-        event.sender.send('video-downloaded', videoPath);
-        // Call the function to add the video to the media pool
-        addVideoToMediaPool(videoPath);
-      })
-      .on('error', (err) => {
-        console.error('Error downloading video:', err);
-      });
+    let data = '';
+    response.on('data', (chunk) => {
+      data += chunk;
+    });
+
+    response.on('end', () => {
+      try {
+        const videoData = JSON.parse(data);
+        const videoLink = videoData.video_files[0].link;
+        console.log(`Video data: ${videoData}`);
+        console.log(`Video link: ${videoLink}`);
+
+        https.get(videoLink, (res) => {
+          const file = fs.createWriteStream(videoPath);
+          res.pipe(file);
+          file.on('finish', () => {
+            file.close(() => {
+              console.log('Video downloaded successfully');
+              event.sender.send('video-downloaded', videoPath);
+              addVideoToMediaPool(videoPath);
+            });
+          });
+        }).on('error', (err) => {
+          console.error('Error downloading video:', err);
+        });
+      } catch (error) {
+        console.error('Error parsing video data:', error);
+      }
+    });
+
+    response.on('error', (err) => {
+      console.error('Error fetching video data:', err);
+    });
+  }).on('error', (err) => {
+    console.error('Error with video URL request:', err);
   });
 });
 
 function addVideoToMediaPool(videoPath) {
-  // Add the video to the DaVinci Resolve media pool
   const WorkflowIntegration = require('./WorkflowIntegration.node');
   const PLUGIN_ID = "com.blackmagicdesign.resolve.pexelspluginVD";
 
