@@ -13,7 +13,8 @@ export class PexelsService {
     return this.store.selectSnapshot(ApiKeyState.getApiKey);
   }
 
-  private BASE_URL = 'https://api.pexels.com/videos';
+  private BASE_URL: string = 'https://api.pexels.com/videos';
+  private ITEM_PER_PAGE: number = 6;
 
   constructor(private http: HttpClient) {}
 
@@ -21,13 +22,7 @@ export class PexelsService {
     const apiKey = this.getApiKey();
     return this.http.get(`${this.BASE_URL}/search`, {
       headers: { Authorization: apiKey },
-      params: { query, per_page: '6', page: page.toString() }
+      params: { query, per_page: this.ITEM_PER_PAGE, page: page.toString() }
     });
   }
-
-  // getVideoById(videoId: string) {
-  //   return this.http.get(`${this.BASE_URL}/videos/${videoId}`, {
-  //     headers: { Authorization: this.apiKey }
-  //   });
-  // }
 }
